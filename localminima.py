@@ -126,8 +126,8 @@ def gradient_descent(function, start, learn_rate, n_iter):
     pass
 
 # Example usage
-function = lambda x: (x + 5) ** 2
-start = 3.0
+function = lambda x: (x + 3) ** 2
+start = 2.0
 learn_rate = 0.2
 n_iter = 50
 
