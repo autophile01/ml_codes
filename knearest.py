@@ -1,53 +1,82 @@
 #****** ASSIGNMENT 5 *******
 # Dataset : sales_data_sample.csv
+# Dataset : diabetes.csv (Curicullam)
 # Implement K-Nearest Neighbors algorithm. 
 # Implement K-Nearest Neighbors algorithm on diabetes.csv dataset. Compute confusion matrix, accuracy, error rate, precision and recall on the given dataset.
 
-import numpy as np
 import pandas as pd
-import matplotlib.pyplot as plt
+import numpy as np
 import seaborn as sns
+import matplotlib.pyplot as plt
+from sklearn.model_selection import train_test_split, GridSearchCV
+from sklearn.preprocessing import StandardScaler
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.metrics import confusion_matrix, classification_report, accuracy_score
+from sklearn import preprocessing
 
+df = pd.read_csv("P:\\ML PRACTICAL\\datasets\\diabetes.csv")
+df.info()
 
-df = pd.read_csv("C:\\Users\\vaishnavi\\\OneDrive\\Desktop\\sales_data_sample.csv"),
 df.head()
 
-df.info()
+df.corr().style.background_gradient(cmap='BuGn')
+
+df.drop(['BloodPressure', 'SkinThickness'], axis=1, inplace=True)
+
+df.isna().sum()
 
 df.describe()
 
-fig = plt.figure(figsize=(12,10))
-sns.heatmap(df.corr(), annot=True, fmt='.2f')
-plt.show()
+hist = df.hist(figsize=(20,16))
 
-df= df[['PRICEEACH', 'MSRP']]
-df.head()
+X=df.iloc[:, :df.shape[1]-1] #Independent Variables
+y=df.iloc[:, -1] #Dependent Variable
+X.shape, y.shape
 
-df.isna().any()
+# Split the data into training and test sets
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
-df.describe().T
+# Create a StandardScaler and scale the features
+scaler = StandardScaler()
+X_train = scaler.fit_transform(X_train)
+X_test = scaler.transform(X_test)
 
-df.shape
+def knn(X_train, X_test, y_train, y_test, neighbors, power):
+    model = KNeighborsClassifier(n_neighbors=neighbors, p=power)
+    
+    # Fit and predict with the model
+    y_pred = model.fit(X_train, y_train).predict(X_test)
+    
+    # Calculate accuracy and print it
+    accuracy = accuracy_score(y_test, y_pred)
+    print(f"Accuracy for K-Nearest Neighbors model: {accuracy}")
+    
+    # Calculate confusion matrix
+    cm = confusion_matrix(y_test, y_pred)
+    
+    # Print confusion matrix in a readable format
+    print(f'''Confusion matrix:
+ | Positive Prediction\t| Negative Prediction
+ ---------------+------------------------+----------------------
+ Positive Class | True Positive (TP): {cm[0, 0]}\t| False Negative (FN): {cm[0, 1]}
+ ---------------+------------------------+----------------------
+ Negative Class | False Positive (FP): {cm[1, 0]}\t| True Negative (TN): {cm[1, 1]}\n''')
+    
+    # Generate and print the classification report
+    cr = classification_report(y_test, y_pred)
+    print('Classification report:\n', cr)
 
-from sklearn.cluster import KMeans
-inertia = []
-for i in range(1, 11):
- clusters = KMeans(n_clusters=i, init='k-means++', random_state=42)
- clusters.fit(df)
- inertia.append(clusters.inertia_)
+param_grid = {
+ 'n_neighbors': range(1, 51),
+ 'p': range(1, 4)
+}
+grid = GridSearchCV(estimator=KNeighborsClassifier(), param_grid=param_grid, cv=5)
+grid.fit(X_train, y_train)
+grid.best_estimator_, grid.best_params_, grid.best_score_
 
-plt.figure(figsize=(6, 6))
-sns.lineplot(x = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10], y = inertia)
+knn(X_train, X_test, y_train, y_test, grid.best_params_['n_neighbors'], grid.best_params_['p'])
 
-kmeans = KMeans(n_clusters = 3, random_state = 42)
-y_kmeans = kmeans.fit_predict(df)
-y_kmeans
 
-plt.figure(figsize=(8, 8))
-sns.scatterplot(x=df['PRICEEACH'], y=df['MSRP'], hue=y_kmeans)
-plt.scatter(kmeans.cluster_centers_[:, 0], kmeans.cluster_centers_[:, 1], c='red', marker='X', s=100)
-plt.legend()
-plt.show()
 
-kmeans.cluster_centers_
+
 
