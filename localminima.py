@@ -121,9 +121,6 @@ def gradient_descent(
  # show the plot
  plt.show()
 
-def gradient_descent(function, start, learn_rate, n_iter):
-    # Implementation of gradient descent goes here
-    pass
 
 # Example usage
 function = lambda x: (x + 3) ** 2
