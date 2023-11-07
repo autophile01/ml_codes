@@ -1,0 +1,81 @@
+************ BAR PLOT ***********
+import matplotlib.pyplot as plt
+
+# Sample data
+categories = ['Category A', 'Category B', 'Category C']
+values = [10, 15, 7]
+
+# Create a bar plot
+plt.bar(categories, values)
+plt.xlabel('Categories')
+plt.ylabel('Values')
+plt.title('Bar Plot')
+plt.show()
+
+************* PIECHART ***********
+import matplotlib.pyplot as plt
+
+# Sample data
+labels = ['Label A', 'Label B', 'Label C']
+sizes = [30, 40, 25]
+
+# Create a pie chart
+plt.pie(sizes, labels=labels, autopct='%1.1f%%')
+plt.title('Pie Chart')
+plt.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
+plt.show()
+
+*********** SCATTER PLOT **************
+import matplotlib.pyplot as plt
+
+# Sample data
+x = [1, 2, 3, 4, 5]
+y = [10, 8, 6, 4, 2]
+
+# Create a scatter plot
+plt.scatter(x, y)
+plt.xlabel('X-axis')
+plt.ylabel('Y-axis')
+plt.title('Scatter Plot')
+plt.show()
+
+*********** VIOLIN PLOT ***************
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+# Sample data
+data = sns.load_dataset('iris')  # Example dataset from Seaborn
+
+# Create a violin plot
+sns.violinplot(x='species', y='sepal_length', data=data)
+plt.xlabel('Species')
+plt.ylabel('Sepal Length')
+plt.title('Violin Plot')
+plt.show()
+
+************** LINE PLOT ******************
+import matplotlib.pyplot as plt
+
+# Sample data
+x = [1, 2, 3, 4, 5]
+y = [10, 8, 6, 4, 2]
+
+# Create a line plot
+plt.plot(x, y)
+plt.xlabel('X-axis')
+plt.ylabel('Y-axis')
+plt.title('Line Plot')
+plt.show()
+
+************** HISTOGRAM ******************
+import matplotlib.pyplot as plt
+
+# Sample data
+data = [2, 3, 3, 4, 5, 5, 5, 6, 6, 6, 6, 7, 7, 8, 9]
+
+# Create a histogram
+plt.hist(data, bins=5, edgecolor='k')
+plt.xlabel('Value')
+plt.ylabel('Frequency')
+plt.title('Histogram')
+plt.show()
